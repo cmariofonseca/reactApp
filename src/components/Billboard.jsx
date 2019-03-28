@@ -12,8 +12,10 @@ class Billboard extends Component {
   }
 
   getProducts = () => {
-    axios.get('http://localhost:3000/popularity')
-    .then(data => this.setState({ movies: data['results'] }))
+    axios.get('http://localhost:8080/popularity')
+    .then(data => {
+      this.setState({ movies: data.data[0] })
+    })
     .catch(err => {
       console.log(err);
       return null;
@@ -27,18 +29,19 @@ class Billboard extends Component {
         {this.state.movies.length === 0 ? (
           <div>Loading...</div>
         ) : (
-          this.state.users.map((e, i) => {
-            return <div key={i}>{e.first_name}</div>;
+          this.state.movies.map((movie, i) => {
+            return (
+              <div className="card" key={i}>
+                <img className="card-img-top" src={ this.props.src } alt=""/>
+                <div className="card-body">
+                  <h5 className="card-title"> { movie.title } </h5>
+                  <p className="card-text">Fecha de estreno: { movie.release_date } </p>
+                  <a className="btn btn-primary" href="{}" onClick={ this.handleChageState }>Más información</a>
+                </div>
+              </div>
+            )  
           })
         )}
-        <div className="card">
-          <img className="card-img-top" src={ this.props.src } alt=""/>
-          <div className="card-body">
-            <h5 className="card-title"> movie.title </h5>
-            <p className="card-text">Fecha de estreno: movie.release_date </p>
-            <a className="btn btn-primary" href="{}" onClick={ this.handleChageState }>Más información</a>
-          </div>
-        </div>
       </div>
     );
 
