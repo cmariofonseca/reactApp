@@ -12,33 +12,21 @@ class Billboard extends Component {
     this.getMovies();
   }
 
-  /* getMovies = () => {
-    axios.get('http://localhost:8080/popularity')
-    .then(data => {
-      this.setState({ movies: data.data[0] })
-    })
-    .catch(err => {
-      console.log(err);
-      return null;
-    });
-  } */
-
   getMovies = async () => {
     let res = await axios.get('http://localhost:8080/popularity');
-    let { data } = await res[0];
+    let data = await res.data[0];
     this.setState({ movies: data });
     
   };
 
   imagesViewer(movie) {
-    const url = "http://image.tmdb.org/t/p/w300";
+    const url = 'http://image.tmdb.org/t/p/w300';
     if (movie.backdrop_path) {
       return `${url}/${movie.backdrop_path}`;
     } else if (movie.poster_path) {
       return `${url}/${movie.poster_path}`;
     } else {
-      // return '../../assets/noimage.jpg';
-      return logo;
+      return '../../public/images/noimage.jpg';
     }
   };
 
