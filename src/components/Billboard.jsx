@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import logo from '../logo.svg';
 
 class Billboard extends Component {
 
@@ -8,10 +9,10 @@ class Billboard extends Component {
   };
   
   componentDidMount() {
-    this.getProducts();
+    this.getMovies();
   }
 
-  getProducts = () => {
+  /* getMovies = () => {
     axios.get('http://localhost:8080/popularity')
     .then(data => {
       this.setState({ movies: data.data[0] })
@@ -20,7 +21,26 @@ class Billboard extends Component {
       console.log(err);
       return null;
     });
-  }
+  } */
+
+  getMovies = async () => {
+    let res = await axios.get('http://localhost:8080/popularity');
+    let { data } = await res[0];
+    this.setState({ movies: data });
+    
+  };
+
+  imagesViewer(movie) {
+    const url = "http://image.tmdb.org/t/p/w300";
+    if (movie.backdrop_path) {
+      return `${url}/${movie.backdrop_path}`;
+    } else if (movie.poster_path) {
+      return `${url}/${movie.poster_path}`;
+    } else {
+      // return '../../assets/noimage.jpg';
+      return logo;
+    }
+  };
 
   render() {
 
@@ -32,7 +52,7 @@ class Billboard extends Component {
           this.state.movies.map((movie, i) => {
             return (
               <div className="card" key={i}>
-                <img className="card-img-top" src={ this.props.src } alt=""/>
+                <img className="card-img-top" src={ this.imagesViewer(movie) } alt=""/>
                 <div className="card-body">
                   <h5 className="card-title"> { movie.title } </h5>
                   <p className="card-text">Fecha de estreno: { movie.release_date } </p>
